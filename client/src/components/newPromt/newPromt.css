@@ -1,0 +1,46 @@
+.endChat {
+  padding-bottom: 2rem;
+}
+
+.newForm {
+  position: absolute;
+  width: 56%;
+  bottom: 0;
+  background-color: #313244;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1rem;
+
+  input {
+    width: 100%;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    resize: none;
+    outline: none;
+    overflow: scroll;
+    line-height: 1.5;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    min-height: 3rem;
+  }
+
+  button,
+  label {
+    border-radius: 50%;
+    background-color: #585b70;
+    display: flex;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+
+    img {
+      width: 1rem;
+      height: 1rem;
+      object-fit: cover;
+    }
+  }
+}

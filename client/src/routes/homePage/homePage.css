@@ -1,0 +1,136 @@
+.homepage {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 10rem;
+  overflow-y: auto;
+  overflow-x: auto;
+
+  .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+
+    h1 {
+      font-size: 5rem;
+      background: linear-gradient(to right,
+          #ff0000,
+          #ff00ff,
+          #0000ff,
+          #00ffff,
+          #00ff00);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    h3 {
+      font-weight: 400;
+      max-width: 70%;
+    }
+
+    a {
+      background-color: #b4befe;
+      padding: 0.7rem 1rem;
+      color: #1e1e2e;
+      border-radius: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #cba6f7;
+        transition: ease-in-out 0.2s;
+      }
+    }
+  }
+
+  .right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .imgContainer {
+      display: flex;
+      justify-content: center;
+      background-color: #140e2d;
+      width: 85%;
+      height: 60%;
+      border-radius: 3rem;
+      position: relative;
+      overflow: hidden;
+
+      .bgContainer {
+        top: 0;
+        left: 0;
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 3rem;
+
+        .bg {
+          background-image: url("./bg.png");
+          opacity: 0.2;
+          width: 200%;
+          height: 100%;
+          background-size: auto 100%;
+          animation: 8s ease-in-out infinite alternate slide;
+        }
+      }
+
+      .bot {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        animation: 3s ease-in-out infinite alternate bounce;
+      }
+    }
+  }
+
+  .orbital {
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.1;
+    animation: 100s linear infinite alternate rotate;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(60deg);
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  100% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
