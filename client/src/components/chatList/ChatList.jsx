@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "./chatList.css";
 import { useQuery } from "@tanstack/react-query";
+import { SignedIn, SignOutButton } from "@clerk/clerk-react";
 
 const ChatList = () => {
   const { isPending, error, data } = useQuery({
@@ -15,9 +16,8 @@ const ChatList = () => {
     <div className="chatList">
       <span className="title">DASHBOARD</span>
       <Link to="/dashboard">Create new Chat</Link>
-      <Link to="/dashboard">Explore</Link>
-      <Link to="/dashboard">Contact</Link>
       <hr />
+
       <span className="title">Recent Chats</span>
       <div className="list">
         {isPending ? (
@@ -32,6 +32,14 @@ const ChatList = () => {
           ))
         )}
       </div>
+      <hr />
+      <SignedIn className="bottom">
+        <SignOutButton className="glowing-btn">
+          <span className="glowing-txt">
+            Sig<span className="faulty-letter">n O</span> ut
+          </span>
+        </SignOutButton>
+      </SignedIn>
     </div>
   );
 };

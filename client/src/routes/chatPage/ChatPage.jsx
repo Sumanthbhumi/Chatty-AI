@@ -34,7 +34,7 @@ const ChatPage = () => {
                       width="300"
                       height="200"
                       transformation={[{ width: 380 }]}
-                      className="image user"
+                      className="message user image"
                     />
                   )}
                   <div
@@ -47,7 +47,7 @@ const ChatPage = () => {
                   </div>
                 </>
               ))}
-          <NewPromt data={data} />
+          {data && <NewPromt data={data} />}
         </div>
       </div>
     </div>

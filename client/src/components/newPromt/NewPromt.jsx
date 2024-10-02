@@ -76,8 +76,8 @@ const NewPromt = ({ data }) => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   }, [img, question, answer, data]);
 
-  const add = async (text) => {
-    setQuestion(text);
+  const add = async (text, isInitial) => {
+    if (!isInitial) setQuestion(text);
 
     try {
       const result = await chat.sendMessageStream(
@@ -103,9 +103,20 @@ const NewPromt = ({ data }) => {
     const text = e.target.text.value;
     if (!text) return;
 
-    add(text);
+    add(text, false);
     e.target.text.value = "";
   };
+
+  // for testing
+  const hasRun = useRef(false);
+  useEffect(() => {
+    if (!hasRun.current) {
+      if (data.history.length) {
+        add(data.history[0].parts[0].text, true);
+      }
+    }
+    hasRun.current = true;
+  }, [hasRun]);
 
   return (
     <>
