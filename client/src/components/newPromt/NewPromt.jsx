@@ -9,10 +9,27 @@ const NewPromt = () => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
+  const chat = model.startChat({
+    history: [
+      {
+        role: "user",
+        parts: [{ text: "Hello" }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Hello, how can I help you today?" }],
+      },
+    ],
+    generateConfig: {
+      // maxOutputTokens: 100,
+    },
+  });
+
   const [img, setImg] = useState({
     isLoading: false,
     error: "",
     dbData: {},
+    aiData: {},
   });
 
   const endRef = useRef(null);
@@ -23,21 +40,39 @@ const NewPromt = () => {
 
   const add = async (text) => {
     setQuestion(text);
-    const result = await model.generateContent(text);
-    setAnswer(result.response.text);
+
+    const result = await chat.sendMessageStream(
+      Object.entries(img.aiData).length ? [img.aiData, text] : [text],
+    );
+
+    let accumulatedText = "";
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      accumulatedText += chunkText;
+      setAnswer(accumulatedText);
+    }
+
+    setImg({
+      isLoading: false,
+      error: "",
+      dbData: {},
+      aiData: {},
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const text = e.target.text.value;
     if (!text) return;
+
     add(text);
     e.target.text.value = "";
   };
 
   return (
     <>
-      {img.isLoading && <div className="message user">uploading...</div>}
+      {img.isLoading && <div className="uploading message "></div>}
       {img.dbData?.filePath && (
         <div className="message user">
           <IKImage

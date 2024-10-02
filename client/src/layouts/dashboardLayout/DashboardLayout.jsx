@@ -16,7 +16,7 @@ const DashboardLayout = () => {
   }, [userId, isLoaded, navigate]);
 
   if (!isLoaded) {
-    return "Loading...";
+    return <div className="loader"></div>;
   }
 
   return (

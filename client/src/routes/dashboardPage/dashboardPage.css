@@ -59,9 +59,13 @@
         flex: 1;
 
         img {
-          height: 3rem;
-          width: 3rem;
-          object-fit: cover;
+          display: block;
+          width: 100%;
+          max-width: 4rem;
+          max-height: 4rem;
+          /* height: 3rem; */
+          /* width: 3rem; */
+          /* object-fit: cover; */
         }
       }
     }

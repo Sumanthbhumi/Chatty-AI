@@ -19,16 +19,25 @@
     gap: 0.5rem;
     line-height: 1.5;
 
-    p,
-    li {
-      margin: 1rem 2rem;
-    }
-
     .message {
+      overflow-y: auto;
+      overflow-wrap: break-word;
       padding: 0.8rem;
+
+      p,
+      li {
+        margin: 1rem 2rem;
+      }
+
       margin-bottom: 0.5rem;
 
       &.user {
+
+        p,
+        li {
+          margin: 0;
+        }
+
         background-color: #313244;
         border-radius: 1rem;
         max-width: 80%;
