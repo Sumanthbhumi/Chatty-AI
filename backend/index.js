@@ -4,7 +4,10 @@ import cors from "cors";
 import mongoose from "mongoose";
 import UserChats from "./models/userChats.js";
 import Chat from "./models/chat.js";
-import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
+import {
+  ClerkExpressRequireAuth,
+  ClerkExpressWithAuth,
+} from "@clerk/clerk-sdk-node";
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -118,6 +121,46 @@ app.get("/api/chats/:id", ClerkExpressWithAuth(), async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("Error fetching chat");
+  }
+});
+
+app.post("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
+  const userId = req.auth.userId;
+
+  console.log("Authenticated User ID:", userId);
+  const { question, answer, img } = req.body;
+  console.log("Request Body:", req.body);
+
+  const newItem = [
+    ...(question
+      ? [{ role: "user", parts: [{ text: question }], ...(img && { img }) }]
+      : []),
+    { role: "model", parts: [{ text: answer, img }] },
+  ];
+
+  try {
+    const chatExists = await Chat.findOne({ _id: req.params.id, userId });
+    if (!chatExists) {
+      return res.status(404).send("Chat not found");
+    }
+
+    const updatedChat = await Chat.updateOne(
+      { _id: req.params.id, userId },
+      {
+        $push: {
+          history: {
+            $each: newItem,
+          },
+        },
+      },
+    );
+
+    // Optionally fetch and return the updated chat
+    const updatedChatData = await Chat.findOne({ _id: req.params.id, userId });
+    res.status(200).send(updatedChatData);
+  } catch (error) {
+    console.error("Error updating chat:", error);
+    res.status(500).send("Error sending message");
   }
 });
 

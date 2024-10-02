@@ -58,19 +58,18 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 500px) {
   .menu {
-    width: 70%;
-    left: -100%;
+    display: none !important;
   }
 
   .content {
-    padding: 1rem;
-    margin-left: 0;
-  }
+    width: 100% !important;
+    padding: 0 !important;
 
-  .content.content-shift {
-    margin-left: 0;
+    .message {
+      padding: 0.3 !important;
+    }
   }
 }
 

@@ -26,29 +26,28 @@ const ChatPage = () => {
             : error
               ? "Something went wrong"
               : data?.history?.map((message, i) => (
-                  <>
-                    {message.img && (
-                      <IKImage
-                        urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
-                        path={message.img}
-                        height="300"
-                        width="400"
-                        transformation={[{ height: 300, width: 400 }]}
-                        loading="lazy"
-                        lqip={{ active: true, quality: 20 }}
-                      />
-                    )}
-                    <div
-                      className={
-                        message.role === "user" ? "message user" : "message"
-                      }
-                      id={i}
-                    >
-                      <Markdown>{message.parts[0].text}</Markdown>
-                    </div>
-                  </>
-                ))}
-          <NewPromt />
+                <>
+                  {message.parts[0].img && (
+                    <IKImage
+                      urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
+                      path={message.parts[0].img}
+                      width="300"
+                      height="200"
+                      transformation={[{ width: 380 }]}
+                      className="image user"
+                    />
+                  )}
+                  <div
+                    className={
+                      message.role === "user" ? "message user" : "message"
+                    }
+                    key={i}
+                  >
+                    <Markdown>{message.parts[0].text}</Markdown>
+                  </div>
+                </>
+              ))}
+          <NewPromt data={data} />
         </div>
       </div>
     </div>

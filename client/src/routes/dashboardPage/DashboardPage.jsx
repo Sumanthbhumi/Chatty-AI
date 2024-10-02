@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import "./dashboardPage.css";
-import { useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {
@@ -24,6 +23,7 @@ const DashboardPage = () => {
       navigate(`/dashboard/chats/${id}`);
     },
   });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 

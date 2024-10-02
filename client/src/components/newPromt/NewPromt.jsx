@@ -4,10 +4,13 @@ import "./newPromt.css";
 import Upload from "../upload/Upload";
 import model from "../../lib/gemini";
 import Markdown from "react-markdown";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const NewPromt = () => {
+const NewPromt = ({ data }) => {
   const [question, setQuestion] = useState("");
+
   const [answer, setAnswer] = useState("");
+  const queryClient = useQueryClient();
 
   const chat = model.startChat({
     history: [
@@ -32,32 +35,66 @@ const NewPromt = () => {
     aiData: {},
   });
 
+  const mutation = useMutation({
+    mutationFn: () => {
+      return fetch(`${import.meta.env.VITE_API_URL}/api/chats/${data._id}`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: question.length ? question : undefined,
+          answer,
+          img: img.dbData?.filePath || undefined,
+        }),
+      }).then((res) => res.json());
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient
+        .invalidateQueries({ queryKey: ["chat", data._id] })
+        .then(() => {
+          setQuestion("");
+          setAnswer("");
+          setImg({
+            isLoading: false,
+            error: "",
+            dbData: {},
+            aiData: {},
+          });
+        });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const endRef = useRef(null);
 
   useEffect(() => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [img, question, answer]);
+  }, [img, question, answer, data]);
 
   const add = async (text) => {
     setQuestion(text);
 
-    const result = await chat.sendMessageStream(
-      Object.entries(img.aiData).length ? [img.aiData, text] : [text],
-    );
+    try {
+      const result = await chat.sendMessageStream(
+        Object.entries(img.aiData).length ? [img.aiData, text] : [text],
+      );
 
-    let accumulatedText = "";
-    for await (const chunk of result.stream) {
-      const chunkText = chunk.text();
-      accumulatedText += chunkText;
-      setAnswer(accumulatedText);
+      let accumulatedText = "";
+      for await (const chunk of result.stream) {
+        const chunkText = chunk.text();
+        accumulatedText += chunkText;
+        setAnswer(accumulatedText);
+      }
+
+      mutation.mutate();
+    } catch (error) {
+      console.log(error);
     }
-
-    setImg({
-      isLoading: false,
-      error: "",
-      dbData: {},
-      aiData: {},
-    });
   };
 
   const handleSubmit = async (e) => {
@@ -74,7 +111,7 @@ const NewPromt = () => {
     <>
       {img.isLoading && <div className="uploading message "></div>}
       {img.dbData?.filePath && (
-        <div className="message user">
+        <div className="image ">
           <IKImage
             urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
             path={img.dbData.filePath}
@@ -99,7 +136,7 @@ const NewPromt = () => {
       <form className="newForm" onSubmit={handleSubmit}>
         <Upload setImg={setImg} />
         <input type="file" multiple={false} hidden id="file" />
-        <input placeholder="Write a new promt..." name="text" />
+        <input placeholder="Ask Chatty AI ;)" name="text" />
         <button>
           <img src="/arrow.png" alt="" />
         </button>
