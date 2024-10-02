@@ -14,14 +14,10 @@ const NewPromt = ({ data }) => {
 
   const chat = model.startChat({
     history: [
-      {
-        role: "user",
-        parts: [{ text: "Hello" }],
-      },
-      {
-        role: "model",
-        parts: [{ text: "Hello, how can I help you today?" }],
-      },
+      data?.history?.map(({ role, parts }) => ({
+        role,
+        parts: [{ text: parts[0].text }],
+      })),
     ],
     generateConfig: {
       // maxOutputTokens: 100,
@@ -106,17 +102,6 @@ const NewPromt = ({ data }) => {
     add(text, false);
     e.target.text.value = "";
   };
-
-  // for testing
-  const hasRun = useRef(false);
-  useEffect(() => {
-    if (!hasRun.current) {
-      if (data.history.length) {
-        add(data.history[0].parts[0].text, true);
-      }
-    }
-    hasRun.current = true;
-  }, [hasRun]);
 
   return (
     <>

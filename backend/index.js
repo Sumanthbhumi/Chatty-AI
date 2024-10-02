@@ -1,6 +1,8 @@
 import express from "express";
 import ImageKit from "imagekit";
 import cors from "cors";
+import { fileURLToPath } from "url";
+import path from "path";
 import mongoose from "mongoose";
 import UserChats from "./models/userChats.js";
 import Chat from "./models/chat.js";
@@ -12,9 +14,12 @@ import {
 const port = process.env.PORT || 3000;
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:5173"],
+    origin: ["CLIENT_URL"],
     credentials: true,
   }),
 );
@@ -162,6 +167,12 @@ app.post("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
     console.error("Error updating chat:", error);
     res.status(500).send("Error sending message");
   }
+});
+
+app.use(express.static(path.join(__dirname, "../client")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/index.html"));
 });
 
 app.use((err, req, res, next) => {
