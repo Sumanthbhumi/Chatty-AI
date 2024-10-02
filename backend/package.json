@@ -4,13 +4,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon --env-file .env index.js",
+    "start": "node index.js",
+    "dev": "nodemon --env-file .env index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Your Name",
   "license": "ISC",
-  "description": "",
+  "description": "Backend API for Chat Application",
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.46",
     "cors": "^2.8.5",
