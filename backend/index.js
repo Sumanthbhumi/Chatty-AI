@@ -10,6 +10,9 @@ import {
   ClerkExpressRequireAuth,
   ClerkExpressWithAuth,
 } from "@clerk/clerk-sdk-node";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -19,7 +22,11 @@ const __dirname = path.dirname(__filename);
 
 app.use(
   cors({
-    origin: ["CLIENT_URL", "http://localhost:5173"],
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "https://chatty-ai-delta.vercel.app/",
+    ],
     credentials: true,
   }),
 );
@@ -45,15 +52,6 @@ app.get("/api/upload", (req, res) => {
   const result = imagekit.getAuthenticationParameters();
   res.send(result);
 });
-
-// app.get("/api/test", ClerkExpressWithAuth(), (req, res) => {
-//   if (!req.auth || !req.auth.userId) {
-//     console.log("failed");
-//     return res.status(401).send("Unauthenticated!");
-//   }
-//   console.log("Authenticated request:", req.auth.userId);
-//   console.log("success");
-// });
 
 app.post("/api/chats", ClerkExpressWithAuth(), async (req, res) => {
   const userId = req.auth.userId;

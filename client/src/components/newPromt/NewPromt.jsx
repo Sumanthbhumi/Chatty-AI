@@ -13,12 +13,12 @@ const NewPromt = ({ data }) => {
   const queryClient = useQueryClient();
 
   const chat = model.startChat({
-    history: [
-      data?.history?.map(({ role, parts }) => ({
-        role,
-        parts: [{ text: parts[0].text }],
-      })),
-    ],
+    // history: [
+    //   data?.history.map(({ role, parts }) => ({
+    //     role,
+    //     parts: [{ text: parts[0].text }],
+    //   })),
+    // ],
     generateConfig: {
       // maxOutputTokens: 100,
     },
